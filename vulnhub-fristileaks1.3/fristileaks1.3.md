@@ -1,4 +1,6 @@
+本地笔记地址：
 
+F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3
 
 [TOC]
 
